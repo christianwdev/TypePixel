@@ -39,7 +39,7 @@ const objectToGems = (
             let gem = {
                 gem: key.split('_')[0],
                 uuid: '',
-                quality: GemQuality.ROUGH, // Assuming ROUGH is one of the enum values in GemQuality
+                quality: GemQuality.ROUGH, // Default to rough in case we don't find it, who knows, their API is a mess.
             };
 
             if (!value) {
@@ -60,7 +60,18 @@ const objectToGems = (
 const extractPetLevel = (petName: string):string => (petName.match(/Lvl (\d+)/) || [null, '0'])[1];
 const stripColorCodes = (inputString: string) =>  inputString.replace(/\u00A7[0-9A-FK-OR]/gi, '').trim();
 
-const convertNbtItemToCustomItem = (nbtItem:any, { params }: { params: any }) => {
+const convertNbtItemToCustomItem = (
+    nbtItem:any,
+    {
+        includeLore = true,
+        includeGems = true,
+        includeEnchantments = true,
+        includeHPB = true,
+        includeStars = true,
+        includePetStats = true
+    }: { [key: string]: boolean }
+) => {
+
     const {
         Count = 0,
         tag: {
@@ -71,43 +82,52 @@ const convertNbtItemToCustomItem = (nbtItem:any, { params }: { params: any }) =>
 
     const baseItem:Item = {
         category: ItemsMappedToCategory[id] || Categories.NONE,
-        count: Count, id, name: stripColorCodes(Name),
+        count: Count, id,
+        name: stripColorCodes(Name),
         rarity: loreToRarity(Lore),
         modifier: stringToEnum(Reforge, modifier) || Reforge.NONE,
-        lore: Lore,
     };
 
     const enchantmentsArray = objectToEnchantments(enchantments);
     const pet = JSON.parse(petInfo);
 
-    if (gems) {
-        baseItem.gems = objectToGems(gems)
+    if (Lore && includeLore) {
+        baseItem.lore = Lore
     }
 
-    if (Object.keys(pet).length > 0)
+    if (Object.keys(pet).length > 0 && includePetStats)
     {
         baseItem.candy = pet.candyUsed || 0
         baseItem.level = parseInt(extractPetLevel(Name));
     }
 
-    if (enchantmentsArray.length > 0) {
+    if (enchantmentsArray.length > 0 && includeEnchantments) {
         baseItem.enchantments = enchantmentsArray
     }
 
-    if (hot_potato_count) {
+    if (gems && includeGems) {
+        baseItem.gems = objectToGems(gems)
+    }
+
+    if (hot_potato_count && includeHPB) {
         baseItem.fuming_potato_books = 0
         baseItem.hot_potato_books = hot_potato_count || 0
     }
 
-    if (dungeon_item_level || upgrade_level) {
+    if ((dungeon_item_level || upgrade_level) && includeStars) {
         baseItem.stars = dungeon_item_level || upgrade_level || 0
     }
 
     return baseItem;
 };
 
-export async function base64ToItems(base64: string, params: any) {
+async function base64ToItems(base64: string, params: { [key:string]: boolean } ) {
     const { parsed } = await nbt.parse(Buffer.from(base64, "base64"));
     const items = nbt.simplify(parsed).i;
     return items.map((item: any) => convertNbtItemToCustomItem(item, params));
 };
+
+export default {
+    base64ToItems: base64ToItems,
+    convertItems: base64ToItems,
+}

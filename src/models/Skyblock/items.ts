@@ -2063,11 +2063,11 @@ export interface Enchantment {
 }
 
 export interface Item {
-    name?: string;
-    count?: number;
-    id?: string;
-    category?: string;
-    rarity?: Rarity;
+    name: string;
+    count: number;
+    id: string;
+    category: string;
+    rarity: Rarity;
     lore?: string[];
 
     // Accessories & Equipment?
