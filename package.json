@@ -1,0 +1,27 @@
+{
+  "name": "typepixel",
+  "version": "1.0.0",
+  "description": "JavaScript library built on Typescript to better manage data received from API endpoints.",
+  "main": "index.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/christianwdev/TypePixel.git"
+  },
+  "keywords": [
+    "Hypixel"
+  ],
+  "author": "christianwdev",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/christianwdev/TypePixel/issues"
+  },
+  "homepage": "https://github.com/christianwdev/TypePixel#readme",
+  "devDependencies": {
+    "@types/node": "^18.15.11",
+    "typescript": "^5.0.4"
+  }
+}
