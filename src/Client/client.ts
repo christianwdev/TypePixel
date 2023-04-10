@@ -1,3 +1,7 @@
+import {Gamemode, Profile} from "../models/Skyblock/profile";
+import {convertJSONToProfile} from "../Skyblock/Profile/profile";
+const fetch = require('node-fetch')
+
 export enum PublicEndpoints {
     ACTIVE_AUCTIONS = 'https://api.hypixel.net/skyblock/auctions',
     ENDED_AUCTIONS = 'https://api.hypixel.net/skyblock/auctions_ended',
@@ -29,26 +33,44 @@ function isEndpointAuthorized(endpoint: PublicEndpoints | AuthorizedEndpoints): 
 
 export class HypixelClient {
 
-    api_key: string
+    api_key?: string
 
-    constructor(api_key: string) {
+    constructor(api_key?: string) {
         this.api_key = api_key
     }
 
-    async makeRequest(endpoint: PublicEndpoints | AuthorizedEndpoints) {
-        if (!isValidEndpoint(endpoint)) {
-            throw new Error('Invalid endpoint provided, please ensure you only pass through either a PublicEndpoint or a AuthorizedEndpoint.');
+    async makeRequest(endpoint: PublicEndpoints | AuthorizedEndpoints, params = '') {
+        try {
+
+            if (!isValidEndpoint(endpoint)) {
+                throw new Error('Invalid endpoint provided, please ensure you only pass through either a PublicEndpoint or a AuthorizedEndpoint.');
+            }
+
+            if (isEndpointAuthorized(endpoint) && (!this.api_key || this.api_key.length < 1)) {
+                throw new Error('You must supply an Hypixel API Key to make requests to authorized endpoints.');
+            }
+
+            let response = await fetch(endpoint + params)
+            console.log(response.status)
+            return response.json()
+
+        } catch (e: any) {
+            console.log(`There was an error when trying to fetch ${endpoint + params} because of `, e)
+            return { success: false, message: e.message || '' }
         }
-
-        if (isEndpointAuthorized(endpoint) && !this.api_key) {
-            throw new Error('You must supply an Hypixel API Key to make API requests to authorized endpoints.');
-        }
-
-
     }
 
-    async getUserProfiles(uuid: string, justGetIdentifiers: boolean = false) {
+    async getUserProfiles(uuid: string, params: any = {}):Promise<Profile[]> {
+        if (!this.api_key || this.api_key.length < 1) {
+            throw new Error('You must supply an Hypixel API Key to get a users profiles.');
+        }
 
+        const allProfileData = await this.makeRequest(AuthorizedEndpoints.SKYBLOCK_PROFILES, `?uuid=${uuid}&key=${this.api_key}`)
+
+        if (!allProfileData.success) { return [] } // Probably errored somewhere
+        if (!allProfileData.profiles || !Array.isArray((allProfileData.profiles))) { return [] } // Also probably errored OR hasn't played.
+
+        return await convertJSONToProfile(allProfileData, params)
     }
 
     async getAuctions(page: number) {

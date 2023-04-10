@@ -1,7 +1,7 @@
 export enum SackItem {
     "WHEAT" = "WHEAT",
     "CARROT" = "CARROT",
-    "POTATO" = "POTATO",
+    "POTATO_ITEM" = "POTATO",
     "PUMPKIN" = "PUMPKIN",
     "MELON" = "MELON",
     "SEEDS" = "SEEDS",
@@ -31,9 +31,9 @@ export enum SackItem {
     "ICE" = "ICE",
     "NETHERRACK" = "NETHERRACK",
     "SAND" = "SAND",
-    "END_STONE" = "END_STONE",
-    "MITHRIL" = "MITHRIL",
-    "TITANIUM" = "TITANIUM",
+    "ENDER_STONE" = "END_STONE",
+    "MITHRIL_ORE" = "MITHRIL_ORE",
+    "TITANIUM_ORE" = "TITANIUM_ORE",
     "TREASURITE" = "TREASURITE",
     "STARFALL" = "STARFALL",
     "HARD_STONE" = "HARD_STONE",
@@ -44,7 +44,7 @@ export enum SackItem {
     "GUNPOWDER" = "GUNPOWDER",
     "ENDER_PEARL" = "ENDER_PEARL",
     "GHAST_TEAR" = "GHAST_TEAR",
-    "SLIMEBALL" = "SLIMEBALL",
+    "SLIME_BALL" = "SLIMEBALL",
     "BLAZE_ROD" = "BLAZE_ROD",
     "MAGMA_CREAM" = "MAGMA_CREAM",
     "OAK_WOOD" = "OAK_WOOD",
@@ -66,41 +66,40 @@ export enum SackItem {
     "PUFFERFISH" = "PUFFERFISH",
     "PRISMARINE_SHARD" = "PRISMARINE_SHARD",
     "PRISMARINE_CRYSTALS" = "PRISMARINE_CRYSTALS",
-    "CLAY" = "CLAY",
-    "LILY_PAD" = "LILY_PAD",
+    "CLAY_BALL" = "CLAY",
+    "WATER_LILY" = "LILY_PAD",
     "INK_SACK" = "INK_SACK",
     "SPONGE" = "SPONGE",
-    "ROUGH_RUBY_GEMSTONE" = "ROUGH_RUBY_GEMSTONE",
-    "FLAWED_RUBY_GEMSTONE" = "FLAWED_RUBY_GEMSTONE",
-    "FINE_RUBY_GEMSTONE" = "FINE_RUBY_GEMSTONE",
-    "FLAWLESS_RUBY_GEMSTONE" = "FLAWLESS_RUBY_GEMSTONE",
-    "ROUGH_AMBER_GEMSTONE" = "ROUGH_AMBER_GEMSTONE",
-    "FLAWED_AMBER_GEMSTONE" = "FLAWED_AMBER_GEMSTONE",
-    "FINE_AMBER_GEMSTONE" = "FINE_AMBER_GEMSTONE",
-    "FLAWLESS_AMBER_GEMSTONE" = "FLAWLESS_AMBER_GEMSTONE",
-    "ROUGH_SAPPHIRE_GEMSTONE" = "ROUGH_SAPPHIRE_GEMSTONE",
-    "FLAWED_SAPPHIRE_GEMSTONE" = "FLAWED_SAPPHIRE_GEMSTONE",
-    "FINE_SAPPHIRE_GEMSTONE" = "FINE_SAPPHIRE_GEMSTONE",
-    "FLAWLESS_SAPPHIRE_GEMSTONE" = "FLAWLESS_SAPPHIRE_GEMSTONE",
-    "ROUGH_JADE_GEMSTONE" = "ROUGH_JADE_GEMSTONE",
-    "FLAWED_JADE_GEMSTONE" = "FLAWED_JADE_GEMSTONE",
-    "FINE_JADE_GEMSTONE" = "FINE_JADE_GEMSTONE",
-    "FLAWLESS_JADE_GEMSTONE" = "FLAWLESS_JADE_GEMSTONE",
-    "ROUGH_AMETHYST_GEMSTONE" = "ROUGH_AMETHYST_GEMSTONE",
-    "FLAWED_AMETHYST_GEMSTONE" = "FLAWED_AMETHYST_GEMSTONE",
-    "FINE_AMETHYST_GEMSTONE" = "FINE_AMETHYST_GEMSTONE",
-    "FLAWLESS_AMETHYST_GEMSTONE" = "FLAWLESS_AMETHYST_GEMSTONE",
-    "ROUGH_TOPAZ_GEMSTONE" = "ROUGH_TOPAZ_GEMSTONE",
-    "FLAWED_TOPAZ_GEMSTONE" = "FLAWED_TOPAZ_GEMSTONE",
-    "FINE_TOPAZ_GEMSTONE" = "FINE_TOPAZ_GEMSTONE",
-    "FLAWLESS_TOPAZ_GEMSTONE" = "FLAWLESS_TOPAZ_GEMSTONE",
-    "ROUGH_JASPER_GEMSTONE" = "ROUGH_JASPER_GEMSTONE",
-    "FLAWED_JASPER_GEMSTONE" = "FLAWED_JASPER_GEMSTONE",
-    "FINE_JASPER_GEMSTONE" = "FINE_JASPER_GEMSTONE",
-    "FLAWLESS_JASPER_GEMSTONE" = "FLAWLESS_JASPER_GEMSTONE",
+    "ROUGH_RUBY_GEM" = "ROUGH_RUBY_GEM",
+    "FLAWED_RUBY_GEM" = "FLAWED_RUBY_GEM",
+    "FINE_RUBY_GEM" = "FINE_RUBY_GEM",
+    "FLAWLESS_RUBY_GEM" = "FLAWLESS_RUBY_GEM",
+    "ROUGH_AMBER_GEM" = "ROUGH_AMBER_GEM",
+    "FLAWED_AMBER_GEM" = "FLAWED_AMBER_GEM",
+    "FINE_AMBER_GEM" = "FINE_AMBER_GEM",
+    "FLAWLESS_AMBER_GEM" = "FLAWLESS_AMBER_GEM",
+    "ROUGH_SAPPHIRE_GEM" = "ROUGH_SAPPHIRE_GEM",
+    "FLAWED_SAPPHIRE_GEM" = "FLAWED_SAPPHIRE_GEM",
+    "FINE_SAPPHIRE_GEM" = "FINE_SAPPHIRE_GEM",
+    "FLAWLESS_SAPPHIRE_GEM" = "FLAWLESS_SAPPHIRE_GEM",
+    "ROUGH_JADE_GEM" = "ROUGH_JADE_GEM",
+    "FLAWED_JADE_GEM" = "FLAWED_JADE_GEM",
+    "FINE_JADE_GEM" = "FINE_JADE_GEM",
+    "FLAWLESS_JADE_GEM" = "FLAWLESS_JADE_GEM",
+    "ROUGH_AMETHYST_GEM" = "ROUGH_AMETHYST_GEM",
+    "FLAWED_AMETHYST_GEM" = "FLAWED_AMETHYST_GEM",
+    "FINE_AMETHYST_GEM" = "FINE_AMETHYST_GEM",
+    "FLAWLESS_AMETHYST_GEM" = "FLAWLESS_AMETHYST_GEM",
+    "ROUGH_TOPAZ_GEM" = "ROUGH_TOPAZ_GEM",
+    "FLAWED_TOPAZ_GEM" = "FLAWED_TOPAZ_GEM",
+    "FINE_TOPAZ_GEM" = "FINE_TOPAZ_GEM",
+    "FLAWLESS_TOPAZ_GEM" = "FLAWLESS_TOPAZ_GEM",
+    "ROUGH_JASPER_GEM" = "ROUGH_JASPER_GEM",
+    "FLAWED_JASPER_GEM" = "FLAWED_JASPER_GEM",
+    "FINE_JASPER_GEM" = "FINE_JASPER_GEM",
+    "FLAWLESS_JASPER_GEM" = "FLAWLESS_JASPER_GEM",
     "SULPHUR" = "SULPHUR",
     "RED_SAND" = "RED_SAND",
-    "MYCELIUM" = "MYCELIUM",
     "SPECTRE_DUST" = "SPECTRE_DUST",
     "BLAZE_ASHES" = "BLAZE_ASHES",
     "MUTATED_BLAZE_ASHES" = "MUTATED_BLAZE_ASHES",
@@ -137,10 +136,10 @@ export enum SackItem {
     "ENCHANTED_MELON" = "ENCHANTED_MELON",
     "ENCHANTED_SEEDS" = "ENCHANTED_SEEDS",
     "ENCHANTED_MUSHROOM" = "ENCHANTED_MUSHROOM",
-    "ENCHANTED_COCOA_BEAN" = "ENCHANTED_COCOA_BEAN",
+    "ENCHANTED_COCOA" = "ENCHANTED_COCOA",
     "ENCHANTED_CACTUS" = "ENCHANTED_CACTUS",
     "ENCHANTED_SUGAR" = "ENCHANTED_SUGAR",
-    "ENCHANTED_NETHER_WART" = "ENCHANTED_NETHER_WART",
+    "ENCHANTED_NETHER_STALK" = "ENCHANTED_NETHER_WART",
     "ENCHANTED_BREAD" = "ENCHANTED_BREAD",
     "ENCHANTED_FEATHER" = "ENCHANTED_FEATHER",
     "ENCHANTED_LEATHER" = "ENCHANTED_LEATHER",
@@ -217,227 +216,53 @@ export enum SackItem {
     "SNOWBALL" = "SNOWBALL",
     "ENCHANTED_PACKED_ICE" = "ENCHANTED_PACKED_ICE",
     "HUNK_OF_ICE" = "HUNK_OF_ICE",
-    "HUNK_OF_BLUE_ICE" = "HUNK_OF_BLUE_ICE"
+    "HUNK_OF_BLUE_ICE" = "HUNK_OF_BLUE_ICE",
+
+    "STONE" = "STONE",
+    "QUARTZ" = "QUARTZ",
+    "PERFECT_AMBER_GEM" = "PERFECT_AMBER_GEM",
+    "PERFECT_JADE_GEM" = "PERFECT_JADE_GEM",
+    "ENCHANTED_HARD_STONE" = "ENCHANTED_HARD_STONE",
+    "PERFECT_TOPAZ_GEM" = "PERFECT_TOPAZ_CRYSTAL",
+    "PERFECT_AMETHYST_GEM" = "PERFECT_AMETHYST_GEM",
+    "PERFECT_JASPER_GEM" = "PERFECT_JAPSER_GEM",
+    "PERFECT_RUBY_GEM" = "PERFECT_RUBY_GEM",
+    "PERFECT_SAPPHIRE_GEM" = "PERFECT_SAPPHIRE_GEM",
+    "FINE_OPAL_GEM" = "FINE_OPAL_GEM",
+    "ENCHANTED_ENDSTONE" = "ENCHANTED_ENDSTONE",
+    "GLACIAL_FRAGMENT" = "GLACIAL_FRAGMENT",
+    "ENCHANTED_BROWN_MUSHROOM" = "ENCHANTED_BROWN_MUSHROOM",
+    "ENCHANTED_RED_MUSHROOM" = "ENCHANTED_RED_MUSHROOM",
+    "ENCHANTED_HAY_BLOCK" = "ENCHANTED_HAY_BLOCK",
+    "PORK" = "PORK",
+    "CARROT_ITEM" = "CARROT_ITEM",
+    "MUSHROOM_COLLECTION" = "MUSHROOM_COLLECTION",
+    "NETHER_STALK" = "NETHER_STALK",
+    "DUNGEON_TRAP" = "DUNGEON_TRAP",
+    "DUNGEON_DECOY" = "DUNGEON_DECOY",
+    "RED_MUSHROOM" = "RED_MUSHROOM",
+    "ENCHANTED_SLIME_BALL" = "ENCHANTED_SLIME_BALL",
+    "BROWN_MUSHROOM" = "BROWN_MUSHROOM",
+    "MAGMA_FISH" = "MAGMA_FISH",
+    "ENCHANTED_CACTUS_GREEN" = "ENCHANTED_CACTUS_GREEN",
+    "RABBIT" = "RABBIT",
+    "ICE_HUNK" = "ICE_HUNK",
+    "SNOW_BLOCK" = "SNOW_BLOCK",
+    "SNOW_BALL" = "SNOW_BALL",
+    "BLUE_ICE_HUNK" = "BLUE_ICE_HUNK",
+    "ENCHANTED_WATER_LILY" = "ENCHANTED_WATER_LILY",
+    "CHILI_PEPPER" = "CHILI_PEPPER",
+    "RABBIT_HIDE" = "RABBIT_HIDE",
+    "ENCHANTED_CLAY_BALL" = "ENCHANTED_CLAY_BALL",
+    "WALNUT" = "WALNUT",
+    "MYCEL" = "MYCELIUM",
+    "FLAWED_OPAL_GEM" = "FLAWED_OPAL_GEM",
+    "SULPHUR_ORE" = "SULPHUR_ORE",
+    "SAND:1" = "RED_SAND",
+    "RAW_BEEF" = "RAW_BEEF",
+    "RABBIT_FOOT" = "RABBIT_FOOT",
 }
 
 export interface SacksCounts {
-    [SackItem.ACACIA_SAPLING]?: number;
-    [SackItem.ACACIA_WOOD]?: number;
-    [SackItem.APPLE]?: number;
-    [SackItem.BEZOS]?: number;
-    [SackItem.BIRCH_SAPLING]?: number;
-    [SackItem.BIRCH_WOOD]?: number;
-    [SackItem.BLAZE_ASHES]?: number;
-    [SackItem.BLAZE_POWDER]?: number;
-    [SackItem.BLAZE_ROD]?: number;
-    [SackItem.BONE]?: number;
-    [SackItem.BURNING_EYE]?: number;
-    [SackItem.CACTUS]?: number;
-    [SackItem.CARROT]?: number;
-    [SackItem.CLAY]?: number;
-    [SackItem.CLOWNFISH]?: number;
-    [SackItem.COAL]?: number;
-    [SackItem.COBBLESTONE]?: number;
-    [SackItem.COCOA_BEANS]?: number;
-    [SackItem.COMPACT_OOZE]?: number;
-    [SackItem.CORRUPTED_FRAGMENT]?: number;
-    [SackItem.CRUDE_GABAGOOL]?: number;
-    [SackItem.CUP_OF_BLOOD]?: number;
-    [SackItem.DARK_OAK_SAPLING]?: number;
-    [SackItem.DARK_OAK_WOOD]?: number;
-    [SackItem.DECOY]?: number;
-    [SackItem.DERELICT_ASHE]?: number;
-    [SackItem.DIAMOND]?: number;
-    [SackItem.DIGESTED_MUSHROOMS]?: number;
-    [SackItem.ECTOPLASM]?: number;
-    [SackItem.EMERALD]?: number;
-    [SackItem.ENCHANTED_ACACIA_WOOD]?: number;
-    [SackItem.ENCHANTED_BIRCH_WOOD]?: number;
-    [SackItem.ENCHANTED_BLAZE_POWDER]?: number;
-    [SackItem.ENCHANTED_BONE]?: number;
-    [SackItem.ENCHANTED_BREAD]?: number;
-    [SackItem.ENCHANTED_CACTUS]?: number;
-    [SackItem.ENCHANTED_CARROT]?: number;
-    [SackItem.ENCHANTED_CLAY]?: number;
-    [SackItem.ENCHANTED_CLOWNFISH]?: number;
-    [SackItem.ENCHANTED_COAL]?: number;
-    [SackItem.ENCHANTED_COBBLESTONE]?: number;
-    [SackItem.ENCHANTED_COCOA_BEAN]?: number;
-    [SackItem.ENCHANTED_DARK_OAK_WOOD]?: number;
-    [SackItem.ENCHANTED_DIAMOND]?: number;
-    [SackItem.ENCHANTED_EMERALD]?: number;
-    [SackItem.ENCHANTED_ENDER_PEARL]?: number;
-    [SackItem.ENCHANTED_END_STONE]?: number;
-    [SackItem.ENCHANTED_FEATHER]?: number;
-    [SackItem.ENCHANTED_FLINT]?: number;
-    [SackItem.ENCHANTED_GHAST_TEAR]?: number;
-    [SackItem.ENCHANTED_GLOWSTONE_DUST]?: number;
-    [SackItem.ENCHANTED_GOLD]?: number;
-    [SackItem.ENCHANTED_GUNPOWDER]?: number;
-    [SackItem.ENCHANTED_ICE]?: number;
-    [SackItem.ENCHANTED_INK_SACK]?: number;
-    [SackItem.ENCHANTED_IRON]?: number;
-    [SackItem.ENCHANTED_JUNGLE_WOOD]?: number;
-    [SackItem.ENCHANTED_LAPIS_LAZULI]?: number;
-    [SackItem.ENCHANTED_LEATHER]?: number;
-    [SackItem.ENCHANTED_LILY_PAD]?: number;
-    [SackItem.ENCHANTED_MAGMA_CREAM]?: number;
-    [SackItem.ENCHANTED_MELON]?: number;
-    [SackItem.ENCHANTED_MITHRIL]?: number;
-    [SackItem.ENCHANTED_MUSHROOM]?: number;
-    [SackItem.ENCHANTED_MUTTON]?: number;
-    [SackItem.ENCHANTED_NETHERRACK]?: number;
-    [SackItem.ENCHANTED_NETHER_WART]?: number;
-    [SackItem.ENCHANTED_OAK_WOOD]?: number;
-    [SackItem.ENCHANTED_OBSIDIAN]?: number;
-    [SackItem.ENCHANTED_PACKED_ICE]?: number;
-    [SackItem.ENCHANTED_PORK]?: number;
-    [SackItem.ENCHANTED_POTATO]?: number;
-    [SackItem.ENCHANTED_PRISMARINE_CRYSTALS]?: number;
-    [SackItem.ENCHANTED_PRISMARINE_SHARD]?: number;
-    [SackItem.ENCHANTED_PUFFERFISH]?: number;
-    [SackItem.ENCHANTED_PUMPKIN]?: number;
-    [SackItem.ENCHANTED_QUARTZ]?: number;
-    [SackItem.ENCHANTED_RAW_CHICKEN]?: number;
-    [SackItem.ENCHANTED_RAW_FISH]?: number;
-    [SackItem.ENCHANTED_RAW_RABBIT]?: number;
-    [SackItem.ENCHANTED_RAW_SALMON]?: number;
-    [SackItem.ENCHANTED_REDSTONE]?: number;
-    [SackItem.ENCHANTED_ROTTEN_FLESH]?: number;
-    [SackItem.ENCHANTED_SAND]?: number;
-    [SackItem.ENCHANTED_SEEDS]?: number;
-    [SackItem.ENCHANTED_SLIMEBALL]?: number;
-    [SackItem.ENCHANTED_SNOW_BLOCK]?: number;
-    [SackItem.ENCHANTED_SPIDER_EYE]?: number;
-    [SackItem.ENCHANTED_SPONGE]?: number;
-    [SackItem.ENCHANTED_SPRUCE_WOOD]?: number;
-    [SackItem.ENCHANTED_STRING]?: number;
-    [SackItem.ENCHANTED_SUGAR]?: number;
-    [SackItem.ENCHANTED_TITANIUM]?: number;
-    [SackItem.ENDER_PEARL]?: number;
-    [SackItem.END_STONE]?: number;
-    [SackItem.FEATHER]?: number;
-    [SackItem.FINE_AMBER_GEMSTONE]?: number;
-    [SackItem.FINE_AMETHYST_GEMSTONE]?: number;
-    [SackItem.FINE_JADE_GEMSTONE]?: number;
-    [SackItem.FINE_JASPER_GEMSTONE]?: number;
-    [SackItem.FINE_RUBY_GEMSTONE]?: number;
-    [SackItem.FINE_SAPPHIRE_GEMSTONE]?: number;
-    [SackItem.FINE_TOPAZ_GEMSTONE]?: number;
-    [SackItem.FLAMING_HEART]?: number;
-    [SackItem.FLAWED_AMBER_GEMSTONE]?: number;
-    [SackItem.FLAWED_AMETHYST_GEMSTONE]?: number;
-    [SackItem.FLAWED_JADE_GEMSTONE]?: number;
-    [SackItem.FLAWED_JASPER_GEMSTONE]?: number;
-    [SackItem.FLAWED_RUBY_GEMSTONE]?: number;
-    [SackItem.FLAWED_SAPPHIRE_GEMSTONE]?: number;
-    [SackItem.FLAWED_TOPAZ_GEMSTONE]?: number;
-    [SackItem.FLAWLESS_AMBER_GEMSTONE]?: number;
-    [SackItem.FLAWLESS_AMETHYST_GEMSTONE]?: number;
-    [SackItem.FLAWLESS_JADE_GEMSTONE]?: number;
-    [SackItem.FLAWLESS_JASPER_GEMSTONE]?: number;
-    [SackItem.FLAWLESS_RUBY_GEMSTONE]?: number;
-    [SackItem.FLAWLESS_SAPPHIRE_GEMSTONE]?: number;
-    [SackItem.FLAWLESS_TOPAZ_GEMSTONE]?: number;
-    [SackItem.GAZING_PEARL]?: number;
-    [SackItem.GHAST_TEAR]?: number;
-    [SackItem.GLOWSTONE_DUST]?: number;
-    [SackItem.GOLD_INGOT]?: number;
-    [SackItem.GRAVEL]?: number;
-    [SackItem.GREEN_CANDY]?: number;
-    [SackItem.GREEN_GIFT]?: number;
-    [SackItem.GUNPOWDER]?: number;
-    [SackItem.HALLOWED_SKULL]?: number;
-    [SackItem.HARD_STONE]?: number;
-    [SackItem.HORN_OF_TAURUS]?: number;
-    [SackItem.HUNK_OF_BLUE_ICE]?: number;
-    [SackItem.HUNK_OF_ICE]?: number;
-    [SackItem.ICE]?: number;
-    [SackItem.INFLATABLE_JERRY]?: number;
-    [SackItem.INK_SACK]?: number;
-    [SackItem.IRON_INGOT]?: number;
-    [SackItem.JUNGLE_SAPLING]?: number;
-    [SackItem.JUNGLE_WOOD]?: number;
-    [SackItem.KADA_LEAD]?: number;
-    [SackItem.LAPIS_LAZULI]?: number;
-    [SackItem.LEATHER]?: number;
-    [SackItem.LEATHER_CLOTH]?: number;
-    [SackItem.LILY_PAD]?: number;
-    [SackItem.LUMINO_FIBER]?: number;
-    [SackItem.LUMP_OF_MAGMA]?: number;
-    [SackItem.MAGMAFISH]?: number;
-    [SackItem.MAGMAG]?: number;
-    [SackItem.MAGMA_CHUNK]?: number;
-    [SackItem.MAGMA_CREAM]?: number;
-    [SackItem.MELON]?: number;
-    [SackItem.MITHRIL]?: number;
-    [SackItem.MOOGMA_PELT]?: number;
-    [SackItem.MUSHROOM]?: number;
-    [SackItem.MUTATED_BLAZE_ASHES]?: number;
-    [SackItem.MUTTON]?: number;
-    [SackItem.MYCELIUM]?: number;
-    [SackItem.NETHERRACK]?: number;
-    [SackItem.NETHER_QUARTZ]?: number;
-    [SackItem.NETHER_WART]?: number;
-    [SackItem.NULL_ATOM]?: number;
-    [SackItem.NULL_SPHERE]?: number;
-    [SackItem.OAK_SAPLING]?: number;
-    [SackItem.OAK_WOOD]?: number;
-    [SackItem.OBSIDIAN]?: number;
-    [SackItem.ORB_OF_ENERGY]?: number;
-    [SackItem.POTATO]?: number;
-    [SackItem.PRISMARINE_CRYSTALS]?: number;
-    [SackItem.PRISMARINE_SHARD]?: number;
-    [SackItem.PUFFERFISH]?: number;
-    [SackItem.PUMPKIN]?: number;
-    [SackItem.PUMPKIN_GUTS]?: number;
-    [SackItem.PURPLE_CANDY]?: number;
-    [SackItem.PYROCLASTIC_SCALE]?: number;
-    [SackItem.RAW_CHICKEN]?: number;
-    [SackItem.RAW_FISH]?: number;
-    [SackItem.RAW_PORKCHOP]?: number;
-    [SackItem.RAW_RABBIT]?: number;
-    [SackItem.RAW_SALMON]?: number;
-    [SackItem.RAW_SOULFLOW]?: number;
-    [SackItem.REDSTONE]?: number;
-    [SackItem.RED_GIFT]?: number;
-    [SackItem.RED_SAND]?: number;
-    [SackItem.REVENANT_CATALYST]?: number;
-    [SackItem.REVENANT_FLESH]?: number;
-    [SackItem.ROTTEN_FLESH]?: number;
-    [SackItem.ROUGH_AMBER_GEMSTONE]?: number;
-    [SackItem.ROUGH_AMETHYST_GEMSTONE]?: number;
-    [SackItem.ROUGH_JADE_GEMSTONE]?: number;
-    [SackItem.ROUGH_JASPER_GEMSTONE]?: number;
-    [SackItem.ROUGH_RUBY_GEMSTONE]?: number;
-    [SackItem.ROUGH_SAPPHIRE_GEMSTONE]?: number;
-    [SackItem.ROUGH_TOPAZ_GEMSTONE]?: number;
-    [SackItem.SAND]?: number;
-    [SackItem.SEEDS]?: number;
-    [SackItem.SLIMEBALL]?: number;
-    [SackItem.SNOWBALL]?: number;
-    [SackItem.SOULFLOW]?: number;
-    [SackItem.SPECTRE_DUST]?: number;
-    [SackItem.SPELL_POWDER]?: number;
-    [SackItem.SPIDER_CATALYST]?: number;
-    [SackItem.SPIDER_EYE]?: number
-    [SackItem.SPIRIT_LEAP]?: number;
-    [SackItem.SPONGE]?: number;
-    [SackItem.SPRUCE_SAPLING]?: number;
-    [SackItem.SPRUCE_WOOD]?: number;
-    [SackItem.STARFALL]?: number;
-    [SackItem.STRING]?: number;
-    [SackItem.SUGAR_CANE]?: number;
-    [SackItem.SULPHUR]?: number;
-    [SackItem.TARANTULA_WEB]?: number;
-    [SackItem.TENTACLE_MEAT]?: number;
-    [SackItem.TITANIUM]?: number;
-    [SackItem.TRAP]?: number;
-    [SackItem.TREASURITE]?: number;
-    [SackItem.UNDEAD_CATALYST]?: number;
-    [SackItem.WEREWOLF_SKIN]?: number;
-    [SackItem.WHEAT]?: number;
-    [SackItem.WHITE_GIFT]?: number;
-    [SackItem.WITHER_SOUL]?: number;
-    [SackItem.WOLF_TOOTH]?: number;
+    [key: string | SackItem]: number; // Forgot I'd need to store every rune type and not to mention I'd still miss items.
 }

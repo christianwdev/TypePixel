@@ -1,10 +1,10 @@
 import {HypixelClient} from "./Client/client";
-import Item from "./Skyblock/Item/item";
+import {base64ToItems} from "./Skyblock/Item/item";
+
+const express = require('express')
+const app = express()
 
 export default {
     Client: HypixelClient,
-
-    Skyblock: {
-        Item: Item,
-    }
+    convertItems: base64ToItems,
 }
