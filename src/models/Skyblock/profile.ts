@@ -75,7 +75,7 @@ export interface Member {
     active_effects: Effect[];
     autopet?: AutoPet;
     backpack_contents?: BackpackContents;
-    backpack_icons?: BackpackIcons;
+    backpack_icons?: BackpackContents;
     bestiary?: Bestiary;
     candy_inventory_contents: InventoryContents;
     coin_purse: number;
@@ -292,10 +292,10 @@ export interface Bestiary {
 }
 
 export interface CoopInvitation {
-    timestamp: number,
-    invited_by: string,
-    confirmed: boolean,
-    confirmed_timestamp: number,
+    timestamp?: number,
+    invited_by?: string,
+    confirmed?: boolean,
+    confirmed_timestamp?: number,
 }
 
 export interface Quest {
@@ -376,9 +376,5 @@ export interface InventoryContents {
 }
 
 export interface BackpackContents {
-    [key: string]: InventoryContents
-}
-
-export interface BackpackIcons {
     [key: string]: InventoryContents
 }

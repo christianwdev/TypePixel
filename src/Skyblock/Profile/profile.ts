@@ -1,8 +1,20 @@
-import {Gamemode, InventoryContents, Member, Profile,} from "../../models/Skyblock/profile";
+import {
+    AccessoryBagStorage,
+    AutoPet,
+    AutoPetException,
+    AutoPetRule,
+    BackpackContents, Bestiary, CoopInvitation,
+    Gamemode,
+    InventoryContents, Jacob2, Leveling,
+    Member,
+    Profile,
+} from "../../models/Skyblock/profile";
 import {SackItem, SacksCounts} from "../../models/Skyblock/sacks";
-import {SlayerQuest, SlayerBoss} from "../../models/Skyblock/slayer";
+import {SlayerBoss, SlayerQuest} from "../../models/Skyblock/slayer";
 import {Collection, CollectionType} from "../../models/Skyblock/collections";
-import { base64ToItems } from "../Item/item";
+import {base64ToItems} from "../Item/item";
+import {Forge} from "../../models/Skyblock/mines";
+import {Dungeons} from "../../models/Skyblock/dungeons";
 
 export async function convertJSONToProfile(json: any, params: any = {}):Promise<Profile[]>  {
 
@@ -125,22 +137,22 @@ async function parseMembers(json: any, params: any):Promise<any> {
             wardrobe_equipped_slot = {},
         }:any = value;
 
-        let member:Member = {
-            accessory_bag_storage: undefined,
+        members[key] = {
+            accessory_bag_storage: parseAccessoryBag(accessory_bag_storage),
             achievement_spawned_island_types,
             active_effects,
-            autopet: undefined,
-            backpack_contents: undefined,
-            backpack_icons: undefined,
-            bestiary: undefined,
+            autopet: parseAutoPet(autopet),
+            backpack_contents: await parseBackpack(backpack_contents, constructItems, keepItemBytes),
+            backpack_icons: await parseBackpack(backpack_icons, constructItems, keepItemBytes),
+            bestiary: bestiary,
             candy_inventory_contents: await parseInventory(candy_inventory_contents, constructItems, keepItemBytes),
             coin_purse: 0,
             collection: parseCollCounter(collection),
-            coop_invitation: undefined,
+            coop_invitation: parseCoopInvitation(coop_invitation),
             crafted_generators,
             death_count,
             disabled_potion_effects,
-            dungeons: undefined,
+            dungeons: parseDungeons(dungeons),
             ender_chest_contents: await parseInventory(equippment_contents, constructItems, keepItemBytes),
             equippment_contents: await parseInventory(equippment_contents, constructItems, keepItemBytes),
             experience_skill_alchemy,
@@ -162,13 +174,13 @@ async function parseMembers(json: any, params: any):Promise<any> {
             first_join,
             first_join_hub,
             fishing_treasure_caught,
-            forge: undefined,
+            forge: parseForge(forge),
             harp_quest: undefined,
             inv_armor: await parseInventory(inv_armor, constructItems, keepItemBytes),
             inv_contents: await parseInventory(inv_contents, constructItems, keepItemBytes),
-            jacob2: undefined,
+            jacob2: parseJacob(jacob2),
             last_death,
-            leveling: undefined,
+            leveling: parseLeveling(leveling),
             mining_core: undefined,
             nether_island_player_data: undefined,
             objectives: [],
@@ -198,11 +210,55 @@ async function parseMembers(json: any, params: any):Promise<any> {
             wardrobe_contents: await parseInventory(wardrobe_contents, constructItems, keepItemBytes),
             wardrobe_equipped_slot
         }
-
-        members[key] = member
     }
 
     return members
+}
+
+function parseAutoPet(jsonAutopet: any):AutoPet {
+
+    let {
+        migrated = false,
+        rules = [],
+        rules_limit = 0,
+    } = jsonAutopet
+
+    let autoPetRules:AutoPetRule[] = []
+    for (let rule of rules) {
+        let {
+            id,
+            pet,
+            exceptions = [],
+            data: {
+                slot = '',
+            },
+            uuid = '',
+        } = rule
+
+        let parsedExceptions:AutoPetException[] = []
+        for (let exception of exceptions) {
+            parsedExceptions.push({
+                id: exception.id,
+                data: exception.data
+            })
+        }
+
+        autoPetRules.push({
+            id,
+            pet,
+            exceptions: parsedExceptions,
+            data: {
+                slot
+            },
+            uuid,
+        })
+    }
+
+    return {
+        migrated,
+        rules: autoPetRules,
+        rules_limit,
+    }
 }
 
 async function parseInventory(jsonInv: any, constructItems = true, keepItemBytes = false):Promise<InventoryContents> {
@@ -227,9 +283,46 @@ async function parseInventory(jsonInv: any, constructItems = true, keepItemBytes
     return inv
 }
 
+function parseAccessoryBag(jsonBag: any):AccessoryBagStorage {
+
+    let {
+        tuning: {
+            slot_0: {
+                health = 0,
+                defense = 0,
+                walk_speed = 0,
+                strength = 0,
+                critical_damage = 0,
+                critical_chance = 0,
+                attack_speed = 0,
+                intelligence = 0,
+            } = {},
+        } = {},
+        selected_power = '',
+        unlocked_powers = '',
+        highest_magical_power = 0,
+    } = jsonBag
+
+    return {
+        tuning: {
+            slot_0: {
+                attack_speed,
+                critical_chance,
+                critical_damage,
+                defense,
+                health,
+                intelligence,
+                strength,
+                walk_speed,
+            },
+        },
+        selected_power,
+        unlocked_powers,
+        highest_magical_power
+    }
+}
+
 function parseSlayerBosses(jsonBosses: any) {
-
-
 
 }
 
@@ -340,6 +433,150 @@ function convertInkToString(key: string):string {
     if (key === 'INK_SACK:4') { return 'COCOA_BEANS' }
     return 'INK_SACK'
 
+}
+
+async function parseBackpack(jsonBackpack:any, constructItems = true, keepItemBytes = false):Promise<BackpackContents> {
+
+    let bp:BackpackContents = {}
+
+    for (let [key, data] of Object.entries(jsonBackpack)) {
+        bp[key] = await parseInventory(data, constructItems = true, keepItemBytes = false)
+    }
+
+    return bp
+}
+
+function parseCoopInvitation(jsonInvitation:any):CoopInvitation | undefined {
+
+    if (!jsonInvitation) { return undefined }
+
+    let {
+        timestamp = 0,
+        invited_by = '',
+        confirmed = false,
+        confirmed_timestamp = 0,
+    } = jsonInvitation
+
+    return {
+        timestamp,
+        invited_by,
+        confirmed,
+        confirmed_timestamp,
+    }
+}
+
+function parseJacob(jsonJacob: any):Jacob2 | undefined {
+
+    if (!jsonJacob) { return undefined }
+
+    let {
+        medals_inv: {
+            bronze = 0,
+            silver = 0,
+            gold = 0,
+        },
+        perks = {},
+        contests = {},
+        talked = false,
+    } = jsonJacob
+
+    return {
+        medals_inv: {
+            bronze,
+            silver,
+            gold
+        },
+        perks,
+        contests,
+        talked
+    }
+}
+
+function parseLeveling(jsonLeveling: any):Leveling | undefined {
+
+    if (!jsonLeveling) { return undefined }
+
+    let {
+        experience = 0,
+        completions = {},
+        completed_tasks = [],
+        highest_pet_score = 0,
+        migrated = false,
+        migrated_completions_2 = false,
+    } = jsonLeveling
+
+    return {
+        completed_tasks,
+        completions,
+        experience,
+        highest_pet_score,
+        migrated,
+        migrated_completions_2
+    }
+}
+
+function parseForge(jsonForge: any):Forge | undefined {
+
+    if (!jsonForge) { return undefined }
+
+    let {
+        forge_processes: {
+            forge_1 = {}
+        }
+    } = jsonForge
+
+    let parsedForge1:any = {}
+    for (let [key, value] of Object.keys(forge_1)) {
+
+        if (typeof value !== "object") { continue }
+
+        let {
+            type = '',
+            id = '',
+            startTime = 0,
+            slot = 0,
+            notified = false,
+        } = value
+
+        parsedForge1[key] = {
+            type,
+            id,
+            startTime,
+            slot,
+            notified
+        }
+    }
+
+    return {
+        forge_processes: {
+            forge_1: parsedForge1
+        }
+    }
+}
+
+function parseDungeons(jsonDungeon: any):Dungeons | undefined {
+
+    if (!jsonDungeon) { return undefined }
+
+    let {
+        daily_runs = {},
+        dungeon_journal = {},
+        dungeon_types = {},
+        dungeons_blah_blah = [],
+        player_classes = {},
+        selected_dungeon_class = '',
+        treasures = {}
+    } = jsonDungeon
+
+    return {
+        daily_runs,
+        dungeon_journal,
+        dungeon_types,
+        dungeons_blah_blah,
+        player_classes,
+        selected_dungeon_class,
+        treasures
+    }
 }
 
 function parseBanking() {
