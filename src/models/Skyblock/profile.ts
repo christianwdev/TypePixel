@@ -4,6 +4,7 @@ import {Dungeons} from "./dungeons";
 import {SacksCounts} from "./sacks";
 import {Collection} from "./collections";
 import {Forge, MiningCore} from "./mines";
+import {Item} from "./items";
 
 export enum CuteName {
     APPLE = "Apple",
@@ -32,7 +33,7 @@ export enum CuteName {
 export enum Gamemode { // No type for regular
     IRONMAN = 'ironman',
     BINGO = 'bingo',
-    NORMAL = 'normal'
+    CLASSIC = 'classic'
 }
 
 export enum CakeBuffType {
@@ -52,17 +53,17 @@ export enum CakeBuffType {
 
 export interface Profile {
     profile_id: string;
-    members: {
+    cute_name: CuteName,
+    game_mode: Gamemode,
+    selected: boolean;
+    members?: {
         [key: string]: Member;
     };
-    community_upgrades: {
+    community_upgrades?: {
         upgrade_states: CommunityUpgrade[];
         currently_upgrading?: InProgressCommunityUpgrade[];
     };
-    last_save: number;
-    selected: boolean;
-    cute_name: CuteName,
-    game_mode: Gamemode,
+    last_save?: number;
     banking?: {
         balance?: number,
         transactions?: ProfileTransaction[],
@@ -70,21 +71,21 @@ export interface Profile {
 }
 
 export interface Member {
-    accessory_bag_storage: AccessoryBagStorage;
+    accessory_bag_storage?: AccessoryBagStorage;
     achievement_spawned_island_types: string[];
     active_effects: Effect[];
-    autopet: AutoPet;
-    backpack_contents: BackpackContents;
-    backpack_icons: BackpackIcons;
-    bestiary: Bestiary;
+    autopet?: AutoPet;
+    backpack_contents?: BackpackContents;
+    backpack_icons?: BackpackContents;
+    bestiary?: Bestiary;
     candy_inventory_contents: InventoryContents;
     coin_purse: number;
-    collection: Collection;
-    coop_invitation: CoopInvitation;
+    collection?: Collection;
+    coop_invitation?: CoopInvitation;
     crafted_generators: string[];
     death_count: number;
     disabled_potion_effects: string[];
-    dungeons: Dungeons;
+    dungeons?: Dungeons;
     ender_chest_contents: InventoryContents;
     equippment_contents: InventoryContents;
     experience_skill_alchemy: number;
@@ -98,7 +99,7 @@ export interface Member {
     experience_skill_runecrafting: number;
     experience_skill_social2: number;
     experience_skill_taming: number;
-    experimentation: Experimentation;
+    experimentation?: Experimentation;
     fairy_exchanges: number;
     fairy_souls: number;
     fairy_souls_collected: number;
@@ -107,15 +108,15 @@ export interface Member {
     first_join_hub: number;
     fishing_treasure_caught: number;
     temp_stat_buffs?: TempBuff[],
-    forge: Forge;
-    harp_quest: HarpQuest;
+    forge?: Forge;
+    harp_quest?: HarpQuest;
     inv_armor: InventoryContents;
     inv_contents: InventoryContents;
-    jacob2: Jacob2;
+    jacob2?: Jacob2;
     last_death: number;
-    leveling: Leveling;
-    mining_core: MiningCore;
-    nether_island_player_data: NetherIslandPlayerData;
+    leveling?: Leveling;
+    mining_core?: MiningCore;
+    nether_island_player_data?: NetherIslandPlayerData;
     objectives: Objective[];
     perks: Record<string, unknown>;
     personal_vault_contents: InventoryContents;
@@ -123,9 +124,9 @@ export interface Member {
     potion_bag: InventoryContents;
     quests: Quest[];
     quiver: InventoryContents;
-    sacks_counts: SacksCounts;
-    slayer_bosses: SlayerBosses;
-    slayer_quest: SlayerQuest;
+    sacks_counts?: SacksCounts;
+    slayer_bosses?: SlayerBosses;
+    slayer_quest?: SlayerQuest;
     stats: Stats;
     talisman_bag: InventoryContents;
     trapper_quest: TrapperQuest;
@@ -292,10 +293,10 @@ export interface Bestiary {
 }
 
 export interface CoopInvitation {
-    timestamp: number,
-    invited_by: string,
-    confirmed: boolean,
-    confirmed_timestamp: number,
+    timestamp?: number,
+    invited_by?: string,
+    confirmed?: boolean,
+    confirmed_timestamp?: number,
 }
 
 export interface Quest {
@@ -357,8 +358,8 @@ export interface Leveling {
 }
 
 export interface TrapperQuest {
-    last_task_time: number,
-    pelt_count: number,
+    last_task_time?: number,
+    pelt_count?: number,
 }
 
 export interface Objective {
@@ -371,13 +372,10 @@ export interface Objective {
 
 export interface InventoryContents {
     type: number,
-    data: string,
+    data?: string,
+    items?: Item[],
 }
 
 export interface BackpackContents {
-    [key: string]: InventoryContents
-}
-
-export interface BackpackIcons {
     [key: string]: InventoryContents
 }

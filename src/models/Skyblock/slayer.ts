@@ -1,3 +1,11 @@
+export enum SlayerBoss {
+    "ENDERMAN",
+    "ZOMBIE",
+    "SPIDER",
+    "WOLF",
+    "BLAZE",
+}
+
 export interface SlayerBosses {
     enderman: SlayerBossLevel;
     spider: SlayerBossLevel;
@@ -29,7 +37,7 @@ export interface SlayerBossLevel {
 }
 
 export interface SlayerQuest {
-    type: SlayerBosses,
+    type: SlayerBoss,
     tier: number,
     start_timestamp: number,
     completion_state: number,
@@ -38,4 +46,6 @@ export interface SlayerQuest {
         xp: number,
         timestamp: number,
     }[],
+    last_killed_mob_island: string,
+    spawn_timestamp: number,
 }

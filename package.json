@@ -20,8 +20,10 @@
     "url": "https://github.com/christianwdev/TypePixel/issues"
   },
   "homepage": "https://github.com/christianwdev/TypePixel#readme",
-  "devDependencies": {
+  "dependencies": {
     "@types/node": "^18.15.11",
+    "node-fetch": "^2.6.9",
+    "prismarine-nbt": "^2.2.1",
     "typescript": "^5.0.4"
   }
 }
