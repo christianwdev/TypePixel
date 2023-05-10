@@ -1,8 +1,9 @@
 {
   "name": "typepixel",
   "version": "1.0.0",
-  "description": "JavaScript library built on Typescript to better manage data received from API endpoints.",
-  "main": "index.ts",
+  "description": "JavaScript library built on Typescript to better manage data received from Hypixel API endpoints.",
+  "main": "./dist/index.ts",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -12,18 +13,21 @@
     "url": "git+https://github.com/christianwdev/TypePixel.git"
   },
   "keywords": [
-    "Hypixel"
+    "Hypixel Skyblock", "Hypixel", "Skyblock"
   ],
   "author": "christianwdev",
   "license": "ISC",
+  "files": ["dist", "LICENSE", "README.md", "package.json"],
   "bugs": {
     "url": "https://github.com/christianwdev/TypePixel/issues"
   },
   "homepage": "https://github.com/christianwdev/TypePixel#readme",
   "dependencies": {
-    "@types/node": "^18.15.11",
     "node-fetch": "^2.6.9",
     "prismarine-nbt": "^2.2.1",
     "typescript": "^5.0.4"
+  },
+  "devDependencies": {
+    "@types/node": "^18.15.11"
   }
 }

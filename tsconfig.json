@@ -14,5 +14,9 @@
     "noImplicitAny": true,
     "skipLibCheck": true,
     "declaration": true,
-  }
+  },
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }
