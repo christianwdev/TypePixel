@@ -6,6 +6,8 @@ import { base64ToItems } from "../Item/item";
 
 export async function convertJSONToProfile(json: any, params: any = {}):Promise<Profile[]>  {
 
+    if (!json.profiles) { return [] }
+
     let {
         justGetIdentifiers = false,
     } = params;
