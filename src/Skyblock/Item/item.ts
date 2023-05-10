@@ -121,7 +121,7 @@ const convertNbtItemToCustomItem = (
     return baseItem;
 };
 
-export async function base64ToItems(base64: string, params: { [key:string]: boolean } = {} ) {
+export async function base64ToItems(base64: string, params: { [key:string]: boolean } = {}):Promise<Item[]> {
     const { parsed } = await nbt.parse(Buffer.from(base64, "base64"));
     const items = nbt.simplify(parsed).i;
     return items.map((item: any) => convertNbtItemToCustomItem(item, params));

@@ -4,6 +4,7 @@ import {Dungeons} from "./dungeons";
 import {SacksCounts} from "./sacks";
 import {Collection} from "./collections";
 import {Forge, MiningCore} from "./mines";
+import {Item} from "./items";
 
 export enum CuteName {
     APPLE = "Apple",
@@ -75,7 +76,7 @@ export interface Member {
     active_effects: Effect[];
     autopet?: AutoPet;
     backpack_contents?: BackpackContents;
-    backpack_icons?: BackpackIcons;
+    backpack_icons?: BackpackContents;
     bestiary?: Bestiary;
     candy_inventory_contents: InventoryContents;
     coin_purse: number;
@@ -292,10 +293,10 @@ export interface Bestiary {
 }
 
 export interface CoopInvitation {
-    timestamp: number,
-    invited_by: string,
-    confirmed: boolean,
-    confirmed_timestamp: number,
+    timestamp?: number,
+    invited_by?: string,
+    confirmed?: boolean,
+    confirmed_timestamp?: number,
 }
 
 export interface Quest {
@@ -372,13 +373,9 @@ export interface Objective {
 export interface InventoryContents {
     type: number,
     data?: string,
-    items?: [],
+    items?: Item[],
 }
 
 export interface BackpackContents {
-    [key: string]: InventoryContents
-}
-
-export interface BackpackIcons {
     [key: string]: InventoryContents
 }
