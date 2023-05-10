@@ -4,6 +4,7 @@ import {Dungeons} from "./dungeons";
 import {SacksCounts} from "./sacks";
 import {Collection} from "./collections";
 import {Forge, MiningCore} from "./mines";
+import {Item} from "./items";
 
 export enum CuteName {
     APPLE = "Apple",
@@ -372,7 +373,7 @@ export interface Objective {
 export interface InventoryContents {
     type: number,
     data?: string,
-    items?: [],
+    items?: Item[],
 }
 
 export interface BackpackContents {

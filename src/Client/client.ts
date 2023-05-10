@@ -1,5 +1,8 @@
-import {Gamemode, Profile} from "../models/Skyblock/profile";
+import {Profile} from "../models/Skyblock/profile";
 import {convertJSONToProfile} from "../Skyblock/Profile/profile";
+import {Auction} from "../models/Skyblock/auction";
+import {parseAuctionsPage} from "../Skyblock/Auctions/auction";
+import {ClientConfig} from "../models/Client/clientconfig";
 const fetch = require('node-fetch')
 
 export enum PublicEndpoints {
@@ -33,10 +36,13 @@ function isEndpointAuthorized(endpoint: PublicEndpoints | AuthorizedEndpoints): 
 
 export class HypixelClient {
 
-    api_key?: string
+    config:ClientConfig
 
-    constructor(api_key?: string) {
-        this.api_key = api_key
+    constructor(config:ClientConfig = {
+        auction_cache_duration: 300,
+        profile_cache_duration: 600,
+    }) {
+        this.config = config
     }
 
     async makeRequest(endpoint: PublicEndpoints | AuthorizedEndpoints, params = '') {
@@ -46,7 +52,7 @@ export class HypixelClient {
                 throw new Error('Invalid endpoint provided, please ensure you only pass through either a PublicEndpoint or a AuthorizedEndpoint.');
             }
 
-            if (isEndpointAuthorized(endpoint) && (!this.api_key || this.api_key.length < 1)) {
+            if (isEndpointAuthorized(endpoint) && (!this.config.api_key || this.config.api_key.length < 1)) {
                 throw new Error('You must supply an Hypixel API Key to make requests to authorized endpoints.');
             }
 
@@ -60,21 +66,57 @@ export class HypixelClient {
         }
     }
 
-    async getUserProfiles(uuid: string, params: any = {}):Promise<Profile[]> {
-        if (!this.api_key || this.api_key.length < 1) {
+    async getUserProfiles(uuid: string, params: any = {}):Promise<{ type: string, message: string, profiles: Profile[] }> {
+        if (!this.config.api_key || this.config.api_key.length < 1) {
             throw new Error('You must supply an Hypixel API Key to get a users profiles.');
         }
 
-        const allProfileData = await this.makeRequest(AuthorizedEndpoints.SKYBLOCK_PROFILES, `?uuid=${uuid}&key=${this.api_key}`)
+        const allProfileData = await this.makeRequest(AuthorizedEndpoints.SKYBLOCK_PROFILES, `?uuid=${uuid}&key=${this.config.api_key}`)
 
-        if (!allProfileData.success) { return [] } // Probably errored somewhere
-        if (!allProfileData.profiles || !Array.isArray((allProfileData.profiles))) { return [] } // Also probably errored OR hasn't played.
+        if (!allProfileData.success) {
+            return { type: 'error', message: `Failed getting ${uuid}'s profiles.`, profiles: [] }
+        }
+        if (!allProfileData.profiles || !Array.isArray((allProfileData.profiles))) {
+            return { type: 'error', message: `${uuid} has no available profiles.`, profiles: [] }
+        }
 
-        return await convertJSONToProfile(allProfileData, params)
+        return {
+            type: 'success',
+            message: `Successfully fetched the profiles for ${uuid}.`,
+            profiles: await convertJSONToProfile(allProfileData, params)
+        }
     }
 
-    async getAuctions(page: number) {
+    async getAuctions(page: number = 0, convertItemBytes: boolean = false):Promise<
+        {
+            type: string,
 
+            page?: number,
+            total_pages?: number,
+            total_auctions?: number,
+            last_updated?: number,
+
+            message: string,
+            auctions: Auction[]
+        }>
+    {
+        const auctionsData = await this.makeRequest(PublicEndpoints.ACTIVE_AUCTIONS, `?page=${page}`)
+
+        if (!auctionsData.success) {
+           return { type: 'error', message: auctionsData?.cause || auctionsData?.message || `Error occurred when fetching auctions page ${page}.`, auctions: [] }
+        }
+
+        return {
+            type: 'success',
+
+            page: auctionsData.page,
+            total_pages: auctionsData.totalPages,
+            total_auctions: auctionsData.totalAuctions,
+            last_updated: auctionsData.lastUpdated,
+
+            message: `Successfully fetched auctions page ${page}.`,
+            auctions: await parseAuctionsPage(auctionsData, convertItemBytes)
+        }
     }
 
 }
