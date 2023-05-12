@@ -1,9 +1,9 @@
 {
   "name": "typepixel",
-  "version": "1.0.0",
+  "version": "1.0.11",
   "description": "JavaScript library built on Typescript to better manage data received from Hypixel API endpoints.",
-  "main": "./dist/index.ts",
-  "types": "./dist/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"

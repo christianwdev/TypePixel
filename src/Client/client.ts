@@ -1,7 +1,7 @@
 import {Profile} from "../models/Skyblock/profile";
 import {convertJSONToProfile} from "../Skyblock/Profile/profile";
-import {Auction} from "../models/Skyblock/auction";
-import {parseAuctionsPage} from "../Skyblock/Auctions/auction";
+import {Auction, EndedAuction} from "../models/Skyblock/auction";
+import {parseAuctionsPage, parseEndedAuctions} from "../Skyblock/Auctions/auction";
 import {ClientConfig} from "../models/Client/clientconfig";
 const fetch = require('node-fetch')
 
@@ -57,7 +57,6 @@ export class HypixelClient {
             }
 
             let response = await fetch(endpoint + params)
-            console.log(response.status)
             return response.json()
 
         } catch (e: any) {
@@ -100,6 +99,7 @@ export class HypixelClient {
             auctions: Auction[]
         }>
     {
+        page = Math.floor(page) // Ensure it's a whole number.
         const auctionsData = await this.makeRequest(PublicEndpoints.ACTIVE_AUCTIONS, `?page=${page}`)
 
         if (!auctionsData.success) {
@@ -116,6 +116,29 @@ export class HypixelClient {
 
             message: `Successfully fetched auctions page ${page}.`,
             auctions: await parseAuctionsPage(auctionsData, convertItemBytes)
+        }
+    }
+
+    async getEndedAuctions(convertItemBytes: boolean = false):Promise<
+        {
+            type: string,
+            last_updated?: number,
+            message: string,
+            auctions: EndedAuction[]
+        }>
+    {
+        const auctionsData = await this.makeRequest(PublicEndpoints.ENDED_AUCTIONS)
+
+        if (!auctionsData.success) {
+            return { type: 'error', message: auctionsData?.cause || auctionsData?.message || `Error occurred when fetching ended auctions.`, auctions: [] }
+        }
+
+        return {
+            type: 'success',
+            last_updated: auctionsData.lastUpdated,
+
+            message: `Successfully fetched auctions that have ended in the last 60 seconds.`,
+            auctions: await parseEndedAuctions(auctionsData, convertItemBytes)
         }
     }
 
