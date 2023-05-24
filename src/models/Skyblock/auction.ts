@@ -32,3 +32,16 @@ export interface Auction {
     // Optional or Custom
     item?: Item
 }
+
+export interface EndedAuction {
+    auction_id: string,
+    seller: string,
+    seller_profile: string,
+    buyer: string,
+    timestamp: number,
+    price: number,
+    bin: boolean,
+
+    item_bytes?: string,
+    item?: Item,
+}
