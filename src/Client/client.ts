@@ -3,6 +3,7 @@ import {convertJSONToProfile} from "../Skyblock/Profile/profile";
 import {Auction, EndedAuction} from "../models/Skyblock/auction";
 import {parseAuctionsPage, parseEndedAuctions} from "../Skyblock/Auctions/auction";
 import {ClientConfig} from "../models/Client/clientconfig";
+
 const fetch = require('node-fetch')
 
 export enum PublicEndpoints {
@@ -36,9 +37,9 @@ function isEndpointAuthorized(endpoint: PublicEndpoints | AuthorizedEndpoints): 
 
 export class HypixelClient {
 
-    config:ClientConfig
+    config: ClientConfig
 
-    constructor(config:ClientConfig = {
+    constructor(config: ClientConfig = {
         auction_cache_duration: 300,
         profile_cache_duration: 600,
     }) {
@@ -57,36 +58,45 @@ export class HypixelClient {
             }
 
             let response = await fetch(endpoint + params)
-            return response.json()
+            return {data: response.json(), headers: response.headers}
 
         } catch (e: any) {
             console.log(`There was an error when trying to fetch ${endpoint + params} because of `, e)
-            return { success: false, message: e.message || '' }
+            return {success: false, message: e.message || ''}
         }
     }
 
-    async getUserProfiles(uuid: string, params: any = {}):Promise<{ type: string, message: string, profiles: Profile[] }> {
+    async getUserProfiles(uuid: string, params: any = {}): Promise<{
+        type: string,
+        message: string,
+        profiles: Profile[],
+        headers: any
+    }> {
         if (!this.config.api_key || this.config.api_key.length < 1) {
             throw new Error('You must supply an Hypixel API Key to get a users profiles.');
         }
 
-        const allProfileData = await this.makeRequest(AuthorizedEndpoints.SKYBLOCK_PROFILES, `?uuid=${uuid}&key=${this.config.api_key}`)
+        const {
+            data: allProfileData,
+            headers
+        } = await this.makeRequest(AuthorizedEndpoints.SKYBLOCK_PROFILES, `?uuid=${uuid}&key=${this.config.api_key}`)
 
         if (!allProfileData.success) {
-            return { type: 'error', message: `Failed getting ${uuid}'s profiles.`, profiles: [] }
+            return {type: 'error', message: `Failed getting ${uuid}'s profiles.`, profiles: [], headers}
         }
         if (!allProfileData.profiles || !Array.isArray((allProfileData.profiles))) {
-            return { type: 'error', message: `${uuid} has no available profiles.`, profiles: [] }
+            return {type: 'error', message: `${uuid} has no available profiles.`, profiles: [], headers}
         }
 
         return {
             type: 'success',
             message: `Successfully fetched the profiles for ${uuid}.`,
-            profiles: await convertJSONToProfile(allProfileData, params)
+            profiles: await convertJSONToProfile(allProfileData, params),
+            headers
         }
     }
 
-    async getAuctions(page: number = 0, convertItemBytes: boolean = false):Promise<
+    async getAuctions(page: number = 0, convertItemBytes: boolean = false): Promise<
         {
             type: string,
 
@@ -97,13 +107,18 @@ export class HypixelClient {
 
             message: string,
             auctions: Auction[]
-        }>
-    {
+            headers: any,
+        }> {
         page = Math.floor(page) // Ensure it's a whole number.
-        const auctionsData = await this.makeRequest(PublicEndpoints.ACTIVE_AUCTIONS, `?page=${page}`)
+        const {data: auctionsData, headers} = await this.makeRequest(PublicEndpoints.ACTIVE_AUCTIONS, `?page=${page}`)
 
         if (!auctionsData.success) {
-           return { type: 'error', message: auctionsData?.cause || auctionsData?.message || `Error occurred when fetching auctions page ${page}.`, auctions: [] }
+            return {
+                type: 'error',
+                message: auctionsData?.cause || auctionsData?.message || `Error occurred when fetching auctions page ${page}.`,
+                auctions: [],
+                headers
+            }
         }
 
         return {
@@ -115,22 +130,28 @@ export class HypixelClient {
             last_updated: auctionsData.lastUpdated,
 
             message: `Successfully fetched auctions page ${page}.`,
-            auctions: await parseAuctionsPage(auctionsData, convertItemBytes)
+            auctions: await parseAuctionsPage(auctionsData, convertItemBytes),
+            headers,
         }
     }
 
-    async getEndedAuctions(convertItemBytes: boolean = false):Promise<
+    async getEndedAuctions(convertItemBytes: boolean = false): Promise<
         {
             type: string,
             last_updated?: number,
             message: string,
-            auctions: EndedAuction[]
-        }>
-    {
-        const auctionsData = await this.makeRequest(PublicEndpoints.ENDED_AUCTIONS)
+            auctions: EndedAuction[],
+            headers: any
+        }> {
+        const {data: auctionsData, headers} = await this.makeRequest(PublicEndpoints.ENDED_AUCTIONS)
 
         if (!auctionsData.success) {
-            return { type: 'error', message: auctionsData?.cause || auctionsData?.message || `Error occurred when fetching ended auctions.`, auctions: [] }
+            return {
+                type: 'error',
+                message: auctionsData?.cause || auctionsData?.message || `Error occurred when fetching ended auctions.`,
+                auctions: [],
+                headers
+            }
         }
 
         return {
@@ -138,7 +159,8 @@ export class HypixelClient {
             last_updated: auctionsData.lastUpdated,
 
             message: `Successfully fetched auctions that have ended in the last 60 seconds.`,
-            auctions: await parseEndedAuctions(auctionsData, convertItemBytes)
+            auctions: await parseEndedAuctions(auctionsData, convertItemBytes),
+            headers
         }
     }
 
