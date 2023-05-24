@@ -11,6 +11,14 @@ import {
 
 const nbt = require("prismarine-nbt");
 
+function nameToRawName(name: string) {
+    const reforgeRegEx = new RegExp(`^(${Object.values(Reforge).join('|')})\\s`, 'i');
+    let cleanName = name.replace(reforgeRegEx, '');  // Remove reforge
+    cleanName = cleanName.replace(/✪/g, '');  // Remove stars
+    cleanName = cleanName.replace(/⚚/g, '');  // Remove icon
+    return cleanName.trim();  // Trim white spaces
+}
+
 const loreToRarity = (lore: string[]): Rarity => {
     const rarityLine = lore[lore.length - 1];
     if (!rarityLine) { return Rarity.COMMON }
@@ -86,7 +94,12 @@ const convertNbtItemToCustomItem = (
         name: stripColorCodes(Name),
         rarity: loreToRarity(Lore),
         modifier: stringToEnum(Reforge, modifier) || Reforge.NONE,
+        raw_name: nameToRawName(Name),
     };
+
+    if (baseItem.id === 'PET') {
+        baseItem.category = Categories.PET
+    }
 
     const enchantmentsArray = objectToEnchantments(enchantments);
     const pet = JSON.parse(petInfo);
