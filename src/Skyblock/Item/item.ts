@@ -15,11 +15,11 @@ function nameToRawName(name: string) {
     name = name.toUpperCase() // reforges are in uppercase
 
     const reforgeRegEx = new RegExp(`^(${Object.values(Reforge).join('|')})\\s`, 'i');
-    let cleanName = name.replace(/\u00A7[0-9A-FK-OR]/gi, '') // Remove color codes
+    let cleanName = name.replace(/\u00A7[0-9A-FK-OR]/ig, '') // Remove pet level
     cleanName = cleanName.replace(reforgeRegEx, '');  // Remove reforge
     cleanName = cleanName.replace(/✪/g, '');  // Remove stars
     cleanName = cleanName.replace(/⚚/g, '');  // Remove icon
-    cleanName = cleanName.replace(/\u00A7[0-9A-FK-OR]/ig, '') // Remove pet level
+    cleanName = cleanName.replace(/\u00A7[0-9A-FK-OR]/gi, '') // Remove color code
     return cleanName.trim();  // Trim white spaces
 }
 
