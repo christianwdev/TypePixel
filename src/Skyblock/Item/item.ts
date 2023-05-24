@@ -19,7 +19,7 @@ function nameToRawName(name: string) {
     cleanName = cleanName.replace(reforgeRegEx, '');  // Remove reforge
     cleanName = cleanName.replace(/✪/g, '');  // Remove stars
     cleanName = cleanName.replace(/⚚/g, '');  // Remove icon
-    cleanName = cleanName.replace(/\u00A7[0-9A-FK-OR]/ig, '') // Remove pet level
+    cleanName = cleanName.replace(/\[LVL \d+\]/, '') // Remove pet level
     return cleanName.trim();  // Trim white spaces
 }
 
