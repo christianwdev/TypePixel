@@ -1,6 +1,6 @@
 {
   "name": "typepixel",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "JavaScript library built on Typescript to better manage data received from Hypixel API endpoints.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
