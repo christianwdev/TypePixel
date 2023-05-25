@@ -23,6 +23,17 @@ function nameToRawName(name: string) {
     return cleanName.trim();  // Trim white spaces
 }
 
+function getURL(base64String: string) {
+    try {
+        let decodedString = Buffer.from(base64String, 'base64').toString('utf8');
+        let parsedJson = JSON.parse(decodedString);
+
+        return parsedJson?.textures?.SKIN?.url?.slice(38)
+    } catch (e) {
+        return undefined
+    }
+}
+
 const loreToRarity = (lore: string[]): Rarity => {
     const rarityLine = lore[lore.length - 1];
     if (!rarityLine) { return Rarity.COMMON }
@@ -89,6 +100,7 @@ const convertNbtItemToCustomItem = (
         tag: {
             ExtraAttributes: { modifier = "", hot_potato_count = 0, id = "", upgrade_level = 0, dungeon_item_level = 0, petInfo = "{}", enchantments = [], gems = null } = {},
             display: { Name = "AIR", Lore = [] } = {},
+            SkullOwner: { Properties: { textures = [] } = {} } = {}
         } = {},
     } = nbtItem;
 
@@ -100,6 +112,10 @@ const convertNbtItemToCustomItem = (
         modifier: stringToEnum(Reforge, modifier) || Reforge.NONE,
         raw_name: nameToRawName(Name),
     };
+
+    if (textures?.length > 0 && textures[0]) {
+        baseItem.head_url = getURL(textures[0].Value)
+    }
 
     if (baseItem.id === 'PET') {
         baseItem.category = Categories.PET

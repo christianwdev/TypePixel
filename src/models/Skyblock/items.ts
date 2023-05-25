@@ -2016,6 +2016,7 @@ export enum Reforge {
     FORTUNATE = "fortunate",
     FRUITFUL = "fruitful",
     GENTLE = "gentle",
+    GIANT = 'giant',
     GILDED = "gilded",
     GLISTENING = "glistening",
     GODLY = "godly",
@@ -2249,4 +2250,5 @@ export interface Item {
     // Pet Specific
     level?: number;
     candy?: number;
+    head_url?: string,
 }

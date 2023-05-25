@@ -77,11 +77,12 @@ export class HypixelClient {
         }
 
         const {
-            data: allProfileData,
+            data,
             headers
         } = await this.makeRequest(AuthorizedEndpoints.SKYBLOCK_PROFILES, `?uuid=${uuid}&key=${this.config.api_key}`)
+        let allProfileData = await data
 
-        if (!allProfileData.success) {
+        if (!allProfileData || !allProfileData.success) {
             return {type: 'error', message: `Failed getting ${uuid}'s profiles.`, profiles: [], headers}
         }
         if (!allProfileData.profiles || !Array.isArray((allProfileData.profiles))) {
@@ -110,12 +111,13 @@ export class HypixelClient {
             headers: any,
         }> {
         page = Math.floor(page) // Ensure it's a whole number.
-        const {data: auctionsData, headers} = await this.makeRequest(PublicEndpoints.ACTIVE_AUCTIONS, `?page=${page}`)
+        const {data, headers} = await this.makeRequest(PublicEndpoints.ACTIVE_AUCTIONS, `?page=${page}`)
+        let auctionsData = await data
 
-        if (!auctionsData.success) {
+        if (!auctionsData || !auctionsData.success) {
             return {
                 type: 'error',
-                message: auctionsData?.cause || auctionsData?.message || `Error occurred when fetching auctions page ${page}.`,
+                message: auctionsData?.cause || auctionsData?.message || `Error occurred when fetching auctions page ${page} ${JSON.stringify(auctionsData)}.`,
                 auctions: [],
                 headers
             }
@@ -143,9 +145,10 @@ export class HypixelClient {
             auctions: EndedAuction[],
             headers: any
         }> {
-        const {data: auctionsData, headers} = await this.makeRequest(PublicEndpoints.ENDED_AUCTIONS)
+        const {data, headers} = await this.makeRequest(PublicEndpoints.ENDED_AUCTIONS)
+        let auctionsData = await data
 
-        if (!auctionsData.success) {
+        if (auctionsData || !auctionsData.success) {
             return {
                 type: 'error',
                 message: auctionsData?.cause || auctionsData?.message || `Error occurred when fetching ended auctions.`,
