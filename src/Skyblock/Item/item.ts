@@ -17,9 +17,8 @@ function nameToRawName(name: string) {
     const reforgeRegEx = new RegExp(`^(${Object.values(Reforge).join('|')})\\s`, 'i');
     let cleanName = name.replace(/\u00A7[0-9A-FK-OR]/gi, '') // Remove color codes
     cleanName = cleanName.replace(reforgeRegEx, '');  // Remove reforge
-    cleanName = cleanName.replace(/✪/g, '');  // Remove stars
-    cleanName = cleanName.replace(/⚚/g, '');  // Remove icon
     cleanName = cleanName.replace(/\[LVL \d+\]/, '') // Remove pet level
+    cleanName = cleanName.replace(/[^a-zA-Z ]/g, '');
     return cleanName.trim();  // Trim white spaces
 }
 
@@ -27,8 +26,9 @@ function getURL(base64String: string) {
     try {
         let decodedString = Buffer.from(base64String, 'base64').toString('utf8');
         let parsedJson = JSON.parse(decodedString);
+        let url = parsedJson?.textures?.SKIN?.url
 
-        return parsedJson?.textures?.SKIN?.url?.slice(38)
+        return url.slice(url.lastIndexOf('/') + 1)
     } catch (e) {
         return undefined
     }
