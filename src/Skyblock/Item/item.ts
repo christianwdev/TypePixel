@@ -8,19 +8,23 @@ import {
     Rarity,
     Reforge
 } from '../../models/Skyblock/items';
+import * as fs from "fs";
 
 const nbt = require("prismarine-nbt");
+let allItems = new Map<string, any>()
 
-function nameToRawName(name: string) {
-    name = name.toUpperCase() // reforges are in uppercase
+function initItems() {
+    let itemsFile:any = fs.readFileSync(__dirname + '/../../resources/all_hypixel_items.json')
+    let itemsJSON = JSON.parse(itemsFile)
 
-    const reforgeRegEx = new RegExp(`^(${Object.values(Reforge).join('|')})\\s`, 'i');
-    let cleanName = name.replace(/\u00A7[0-9A-FK-OR]/gi, '') // Remove color codes
-    cleanName = cleanName.replace(reforgeRegEx, '');  // Remove reforge
-    cleanName = cleanName.replace(/\[LVL \d+\]/, '') // Remove pet level
-    cleanName = cleanName.replace(/[^a-zA-Z ]/g, '');
-    return cleanName.trim();  // Trim white spaces
+    for (let item of itemsJSON.items) {
+        allItems.set(item.id, {
+            base_name: item.name,
+            material: item.material
+        })
+    }
 }
+initItems()
 
 function getURL(base64String: string) {
     try {
@@ -104,13 +108,15 @@ const convertNbtItemToCustomItem = (
         } = {},
     } = nbtItem;
 
+    // let material =
+
     const baseItem:Item = {
         category: ItemsMappedToCategory[id] || Categories.NONE,
         count: Count, id,
         name: stripColorCodes(Name),
         rarity: loreToRarity(Lore),
         modifier: stringToEnum(Reforge, modifier) || Reforge.NONE,
-        raw_name: nameToRawName(Name),
+        raw_name: '',
     };
 
     if (textures?.length > 0 && textures[0]) {
