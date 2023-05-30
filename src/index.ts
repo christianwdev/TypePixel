@@ -12,12 +12,12 @@ setTimeout(() => {
     app.get('/test', async (req, res) => {
         let itemsFile:any = fs.readFileSync(__dirname + '/resources/all_hypixel_items.json')
         let itemsJSON = JSON.parse(itemsFile)
-        let allVars = new Set()
+        let allVars = new Map()
 
         for (let item of itemsJSON.items) {
-            Object.keys(item).forEach(key => allVars.add(key))
+            Object.keys(item).forEach(key => allVars.set(key, typeof item[key]))
         }
-        res.json([...allVars.values()])
+        res.json([...allVars.entries()])
     })
     app.listen(1000)
 }, 0)
