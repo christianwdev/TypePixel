@@ -11,20 +11,24 @@ import {
 import * as fs from "fs";
 
 const nbt = require("prismarine-nbt");
-let allItems = new Map<string, any>()
-
-function initItems() {
-    let itemsFile:any = fs.readFileSync(__dirname + '/../../resources/all_hypixel_items.json')
-    let itemsJSON = JSON.parse(itemsFile)
-
-    for (let item of itemsJSON.items) {
-        allItems.set(item.id, {
-            base_name: item.name,
-            material: item.material
-        })
-    }
-}
-initItems()
+// let allItems = new Map<string, any>()
+//
+// function initItems() {
+//     try {
+//         let itemsFile:any = fs.readFileSync(__dirname + '/../../resources/all_hypixel_items.json')
+//         let itemsJSON = JSON.parse(itemsFile)
+//
+//         for (let item of itemsJSON.items) {
+//             allItems.set(item.id, {
+//                 base_name: item.name,
+//                 material: item.material
+//             })
+//         }
+//     } catch (err: any) {
+//         console.error(err)
+//     }
+// }
+// initItems()
 
 function getURL(base64String: string) {
     try {
