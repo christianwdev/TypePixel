@@ -3,7 +3,10 @@ import {convertJSONToProfile} from "../Skyblock/Profile/profile";
 import {Auction, EndedAuction} from "../models/Skyblock/auction";
 import {parseAuctionsPage, parseEndedAuctions} from "../Skyblock/Auctions/auction";
 import {ClientConfig} from "../models/Client/clientconfig";
-const fetch = require('node-fetch')
+import {Product} from "../models/Skyblock/bazaar";
+
+const request = require('request')
+const { lookup } = require('dns-lookup-cache')
 
 export enum PublicEndpoints {
     ACTIVE_AUCTIONS = 'https://api.hypixel.net/skyblock/auctions',
@@ -34,6 +37,25 @@ function isEndpointAuthorized(endpoint: PublicEndpoints | AuthorizedEndpoints): 
     return Object.values(AuthorizedEndpoints).includes(endpoint as AuthorizedEndpoints);
 }
 
+function promiseRequest(url: string):Promise<any> {
+    return new Promise((resolve, reject) => {
+        request({
+            url,
+            method: 'GET',
+            lookup
+        }, async (err: any, response: any, body: any) => {
+            try {
+                if (err) return reject(err)
+
+                let json = await JSON.parse(body)
+                return resolve(json)
+            } catch (e) {
+                return reject(e)
+            }
+        })
+    })
+}
+
 export class HypixelClient {
 
     config:ClientConfig
@@ -56,8 +78,11 @@ export class HypixelClient {
                 throw new Error('You must supply an Hypixel API Key to make requests to authorized endpoints.');
             }
 
-            let response = await fetch(endpoint + params)
-            return response.json()
+            let json = await promiseRequest(endpoint + params)
+            return {
+                success: true,
+                ...json
+            }
 
         } catch (e: any) {
             console.log(`There was an error when trying to fetch ${endpoint + params} because of `, e)
@@ -103,7 +128,7 @@ export class HypixelClient {
         const auctionsData = await this.makeRequest(PublicEndpoints.ACTIVE_AUCTIONS, `?page=${page}`)
 
         if (!auctionsData.success) {
-           return { type: 'error', message: auctionsData?.cause || auctionsData?.message || `Error occurred when fetching auctions page ${page}.`, auctions: [] }
+            return { type: 'error', message: auctionsData?.cause || auctionsData?.message || `Error occurred when fetching auctions page ${page}.`, auctions: [] }
         }
 
         return {
@@ -142,4 +167,31 @@ export class HypixelClient {
         }
     }
 
+    async getBazaar():Promise<
+        {
+            type: string,
+            last_updated?: number,
+            message: string,
+            products: Product[]
+        }>
+    {
+
+        const bazaarData = await this.makeRequest(PublicEndpoints.BAZAAR)
+
+        if (!bazaarData.success || !bazaarData.products) {
+            return { type: 'error', message: bazaarData?.cause || bazaarData?.message || `Error occurred when fetching ended auctions.`, products: [] }
+        }
+
+        let remapped:Product[] = []
+        let products = Object.values(bazaarData.products)
+        products.forEach((prod: any) => remapped.push(prod))
+
+        return {
+            type: 'success',
+            last_updated: bazaarData.lastUpdated,
+
+            message: `Successfully fetched all bazaar products.`,
+            products: remapped
+        }
+    }
 }
