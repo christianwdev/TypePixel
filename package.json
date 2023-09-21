@@ -1,6 +1,6 @@
 {
   "name": "typepixel",
-  "version": "1.0.29",
+  "version": "1.0.31",
   "description": "JavaScript library built on Typescript to better manage data received from Hypixel API endpoints.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -31,7 +31,6 @@
   "homepage": "https://github.com/christianwdev/TypePixel#readme",
   "dependencies": {
     "dns-lookup-cache": "^1.0.4",
-    "node-fetch": "^2.6.9",
     "prismarine-nbt": "^2.2.1",
     "request": "^2.88.2",
     "typescript": "^5.0.4"
