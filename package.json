@@ -30,8 +30,10 @@
   },
   "homepage": "https://github.com/christianwdev/TypePixel#readme",
   "dependencies": {
+    "dns-lookup-cache": "^1.0.4",
     "node-fetch": "^2.6.9",
     "prismarine-nbt": "^2.2.1",
+    "request": "^2.88.2",
     "typescript": "^5.0.4"
   },
   "devDependencies": {

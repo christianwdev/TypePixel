@@ -5,7 +5,8 @@ import {parseAuctionsPage, parseEndedAuctions} from "../Skyblock/Auctions/auctio
 import {ClientConfig} from "../models/Client/clientconfig";
 import {Product} from "../models/Skyblock/bazaar";
 
-const fetch = require('node-fetch')
+const request = require('request')
+const { lookup } = require('dns-lookup-cache')
 
 export enum PublicEndpoints {
     ACTIVE_AUCTIONS = 'https://api.hypixel.net/skyblock/auctions',
@@ -36,6 +37,25 @@ function isEndpointAuthorized(endpoint: PublicEndpoints | AuthorizedEndpoints): 
     return Object.values(AuthorizedEndpoints).includes(endpoint as AuthorizedEndpoints);
 }
 
+function promiseRequest(url: string):Promise<any> {
+    return new Promise((resolve, reject) => {
+        request({
+            url,
+            method: 'GET',
+            lookup
+        }, async (err: any, response: any, body: any) => {
+            try {
+                if (err) return reject(err)
+
+                let json = await JSON.parse(body)
+                return resolve(json)
+            } catch (e) {
+                return reject(e)
+            }
+        })
+    })
+}
+
 export class HypixelClient {
 
     config:ClientConfig
@@ -58,8 +78,11 @@ export class HypixelClient {
                 throw new Error('You must supply an Hypixel API Key to make requests to authorized endpoints.');
             }
 
-            let response = await fetch(endpoint + params)
-            return response.json()
+            let json = await promiseRequest(endpoint + params)
+            return {
+                success: true,
+                ...json
+            }
 
         } catch (e: any) {
             console.log(`There was an error when trying to fetch ${endpoint + params} because of `, e)
